@@ -6,12 +6,12 @@ from botocore.exceptions import ClientError
 # This address must be verified with Amazon SES.
 SENDER = "kiwony@amazon.com"
 
-# Replace recipient@example.com with a "To" address. If your account 
+# Replace recipient@example.com with a "To" address. If your account
 # is still in the sandbox, this address must be verified.
 RECIPIENT = "kiwony@amazon.com"
 
 # Specify a configuration set. If you do not want to use a configuration
-# set, comment the following variable, and the 
+# set, comment the following variable, and the
 # ConfigurationSetName=CONFIGURATION_SET argument below.
 CONFIGURATION_SET = "ConfigSet"
 
@@ -26,17 +26,17 @@ SUBJECT = "Amazon SES Test (SDK for Python)"
 BODY_TEXT = ("Amazon SES Test (Python)\r\n"
              "This email was sent with Amazon SES using the "
              "AWS SDK for Python (Boto)."
-            )
+             )
 
 with open('./Attendents.json') as json_file:
     json_data = json.load(json_file)
 
 for json_string in json_data:
-    TO_EMAIL=json_string['full_name']
-    TO_URL=json_string['access_url']
-    #print(json_string['full_name'])
-    #print(json_string['access_url'])
-            
+    TO_EMAIL = json_string['full_name']
+    TO_URL = json_string['access_url']
+    # print(json_string['full_name'])
+    # print(json_string['access_url'])
+
 # The HTML body of the email.
 BODY_HTML = TO_EMAIL + " " + TO_URL + """<html>
 <head></head>
@@ -48,20 +48,20 @@ BODY_HTML = TO_EMAIL + " " + TO_URL + """<html>
       AWS SDK for Python (Boto)</a>.</p>
 </body>
 </html>
-            """            
+            """
 
 # The character encoding for the email.
 CHARSET = "UTF-8"
 
 # Create a new SES resource and specify a region.
-client = boto3.client('ses',region_name=AWS_REGION)
-#response = client.verify_email_identity(
-  #EmailAddress = 'kiwony@amazon.com'
-#)
+client = boto3.client('ses', region_name=AWS_REGION)
+# response = client.verify_email_identity(
+#EmailAddress = 'kiwony@amazon.com'
+# )
 
 # Try to send the email.
 try:
-    #Provide the contents of the email.
+    # Provide the contents of the email.
     response = client.send_email(
         Destination={
             'ToAddresses': [
@@ -87,9 +87,9 @@ try:
         Source=SENDER,
         # If you are not using a configuration set, comment or delete the
         # following line
-        #ConfigurationSetName=CONFIGURATION_SET,
+        # ConfigurationSetName=CONFIGURATION_SET,
     )
-# Display an error if something goes wrong.	
+# Display an error if something goes wrong.
 except ClientError as e:
     print(e.response['Error']['Message'])
 else:
