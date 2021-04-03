@@ -1,4 +1,4 @@
-**with 16vcpu, run command**
+**with 16vcpu, create dummy data-4000,0000rows, 6.3GB**
 
 ```
 [ec2-user@ip-172-31-5-23 ~]$ time python3 generate.py 40000000
@@ -51,4 +51,63 @@ total 13G
 -rw-rw-r-- 1 ec2-user ec2-user 376M Mar 31 11:38 2.txt
 -rw-rw-r-- 1 ec2-user ec2-user 376M Mar 31 11:38 1.txt
 -rw-rw-r-- 1 ec2-user ec2-user 6.3G Mar 31 12:01 dummy.txt
+```
+
+**Create Database**
+
+```
+MySQL [(none)]> source createDatabase.sql
+Query OK, 1 row affected, 1 warning (0.00 sec)
+
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+Query OK, 0 rows affected (0.04 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+Query OK, 0 rows affected (0.03 sec)
+
+MySQL [test_db]> desc test_load;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| id    | int(13)     | NO   | PRI | NULL    |       |
+| col1  | varchar(45) | NO   |     | NULL    |       |
+| col2  | varchar(45) | NO   |     | NULL    |       |
+| col3  | varchar(45) | NO   |     | NULL    |       |
+| col4  | varchar(45) | NO   |     | NULL    |       |
+| col5  | varchar(45) | NO   |     | NULL    |       |
+| col6  | varchar(45) | NO   |     | NULL    |       |
+| col7  | varchar(45) | NO   |     | NULL    |       |
+| col8  | varchar(45) | NO   |     | NULL    |       |
+| col9  | varchar(45) | NO   |     | NULL    |       |
+| col10 | varchar(45) | NO   |     | NULL    |       |
+| col11 | varchar(45) | NO   |     | NULL    |       |
+| col12 | varchar(45) | NO   |     | NULL    |       |
+| col13 | varchar(45) | NO   |     | NULL    |       |
+| col14 | varchar(45) | NO   |     | NULL    |       |
+| col15 | varchar(45) | NO   |     | NULL    |       |
+| col16 | varchar(45) | NO   |     | NULL    |       |
+| col17 | varchar(45) | NO   |     | NULL    |       |
+| col18 | varchar(45) | NO   |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+19 rows in set (0.00 sec)
+```
+
+**Count Cpu core**
+
+```
+[ec2-user@ip-172-31-5-23 ~]$ cat /proc/cpuinfo |grep 'core id'|wc -l
+64
+```
+
+**Load data using load.py**
+
+```
+
+python3 mysql_parallel_load.py dummy.csv test_load 64
 ```
