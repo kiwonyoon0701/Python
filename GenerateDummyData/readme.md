@@ -1,5 +1,24 @@
 **with 16vcpu, create dummy data-4000,0000rows, 6.3GB**
 
+**Preparation**
+
+```
+sudo apt-get install python3-pip -y
+sudo pip3 install Faker
+git clone https://github.com/fprimex/filecleaver
+cd filecleaver/
+sudo python3 setup.py build
+sudo python3 setup.py install
+
+ubuntu@ip-172-31-10-224:/home/ubuntu> sudo pip3 install Faker
+ubuntu@ip-172-31-10-224:/home/ubuntu> sudo apt-get install python3-pip -y
+ubuntu@ip-172-31-31-236:~$ git clone https://github.com/fprimex/filecleaver
+ubuntu@ip-172-31-31-236:~$ cd filecleaver/
+ubuntu@ip-172-31-31-236:~/filecleaver$ python3 setup.py build
+ubuntu@ip-172-31-31-236:~/filecleaver$ sudo python3 setup.py install
+
+```
+
 ```
 [ec2-user@ip-172-31-5-23 ~]$ time python3 generate.py 40000000
 0 2500000
@@ -51,6 +70,18 @@ total 13G
 -rw-rw-r-- 1 ec2-user ec2-user 376M Mar 31 11:38 2.txt
 -rw-rw-r-- 1 ec2-user ec2-user 376M Mar 31 11:38 1.txt
 -rw-rw-r-- 1 ec2-user ec2-user 6.3G Mar 31 12:01 dummy.txt
+```
+
+**Merge**
+
+```
+#!/bin/bash
+CPUCOUNT=`cat /proc/cpuinfo |grep 'core id'|wc -l`
+for((i=0;i<$CPUCOUNT;i++));
+do
+        echo $i.txt
+        cat $i.txt >> total.csv
+done
 ```
 
 **Create Database**
